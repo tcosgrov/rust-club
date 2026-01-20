@@ -186,7 +186,7 @@ fn main() {
     let input_data = read_file().expect("Failed to read input file");
     // Part 1: count times dial lands on zero at the end of rotations
     println!("\nLand on Zero: {}", count_land_on_zero(&input_data));
-    // Part 2 (method 0x434C49434B): count times dial points at zero during or at the end of rotations
+    // Part 2: count times dial points at zero during or at the end of rotations
     println!("Crossed Zero: {}", count_all_zero_hits(&input_data));
 }
 
