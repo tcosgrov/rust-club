@@ -18,9 +18,9 @@ fn max_two_digits(string_of_digits: &str) -> Option<u8> {
     for i in 0..(len - 1) {
         let tens = digits[i];
         let mut max_ones: u8 = 0;
-        for j in (i + 1)..len {
+        ((i + 1)..len).for_each(|j| {
             max_ones = max_ones.max(digits[j]);
-        }
+        });
 
         let check_value = (tens * 10) + max_ones;
 
@@ -32,7 +32,7 @@ fn max_two_digits(string_of_digits: &str) -> Option<u8> {
     max_num
 }
 
-fn sum_max_two_digits(lines: &Vec<String>) -> u32 {
+fn sum_max_two_digits(lines: &[String]) -> u32 {
     lines
         .iter()
         // I originally had this as:
@@ -59,7 +59,7 @@ pub fn max_twelve_digits(string_of_digits: &str) -> Option<u128> {
 
     let mut answer: [u8; REQ_SIZE] = [0; REQ_SIZE];
     let mut start_pos = 0;
-    for pos in 0..REQ_SIZE {
+    (0..REQ_SIZE).for_each(|pos| {
         // Leave room for the remaining (MIN_SIZE - pos - 1) digits.
         //   end = n - (MIN_SIZE - pos)
         // Search inclusive range [start ..= end] for the maximum digit.
@@ -67,20 +67,17 @@ pub fn max_twelve_digits(string_of_digits: &str) -> Option<u128> {
         let mut best_digit = 0u8;
         let mut best_idx = start_pos;
 
-        for i in start_pos..=end {
+        (start_pos..=end).for_each(|i| {
             let digit = digits[i];
             if digit > best_digit {
                 best_digit = digit;
                 best_idx = i;
-                if best_digit == 9 {
-                    break;
-                }
             }
-        }
+        });
 
         answer[pos] = best_digit;
         start_pos = best_idx + 1;
-    }
+    });
 
     let mut max_num: u128 = 0;
     for d in answer {
