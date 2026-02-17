@@ -1,0 +1,95 @@
+# Advent of Code 2025 - Day 4: Printing Department
+
+## Problem Description
+
+You are working in a printing department and need to optimize forklift work. The goal is to break through a wall, and this involves identifying accessible rolls of paper. The wall is represented as a grid of characters. Rolls of paper are marked with '@', and other characters represent different parts of the wall.
+
+### Part 1
+
+A forklift can access a roll of paper if there are fewer than four other rolls of paper in its eight adjacent positions (including diagonals). Your task for Part 1 is to count how many rolls of paper are accessible by a forklift.
+
+**Example Grid (from problem description):**
+
+```
+..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.
+```
+
+In this example, there are 13 rolls of paper that can be accessed by a forklift (marked with x):
+
+```
+..xx.xx...
+x@@.@.@.@@
+@@@@@.x.@@
+@.@@@@..@.
+x@.@@@@.@x
+.@@@@@@@.@
+.@.@.@.@@@
+x.@@@.@@@@
+.@@@@@@@@.
+x.@.@@@.x.
+```
+
+The puzzle answer for Part 1 was 1551.
+
+### Part 2
+
+Now, the Elves just need help accessing as much of the paper as they can.
+
+Once a roll of paper can be accessed by a forklift, it can be removed. Once a roll of paper is removed, the forklifts might be able to access more rolls of paper, which they might also be able to remove. How many total rolls of paper could the Elves remove if they keep repeating this process?
+
+Starting with the same example as above, here is one way you could remove as many rolls of paper as possible, using highlighted @ to indicate that a roll of paper is about to be removed, and using x to indicate that a roll of paper was just removed:
+
+Initial state:
+```
+..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.
+```
+
+Remove 13 rolls of paper:
+```
+..xx.xx...
+x@@.@.@.@@
+@@@@@.x.@@
+@.@@@@..@.
+x@.@@@@.@x
+.@@@@@@@.@
+.@.@.@.@@@
+x.@@@.@@@@
+.@@@@@@@@.
+x.@.@@@.x.
+```
+
+Remove 12 rolls of paper:
+```
+.......x..
+.@@.x.x.@x
+x@@@...@@.
+x.@@@@..x.
+.x@.@@@@.x.
+.x@@@@@@.x
+.x.@.@.@@@
+..@@@.@@@@
+.x@@@@@@@.
+....@@@...
+```
+
+And so on, until no more rolls can be removed. In this example, a total of 43 rolls of paper can be removed.
+
+Your task for Part 2 is to calculate the total number of rolls of paper that could be removed by repeating this process until no more rolls are accessible.
