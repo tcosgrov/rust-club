@@ -7,24 +7,26 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "D2 Debug",
+      "name": "D5 Debug",
       "sourceLanguages": [
         "rust"
       ],
       "cargo": {
         "args": [
           "build",
-          "--bin=d2",
-          "--package=d2",
-          "--manifest-path=${workspaceFolder}/d2/Cargo.toml"
+          "--bin=d5",
+          "--package=d5",
+          "--manifest-path=${workspaceFolder}/d5/Cargo.toml"
         ],
         "filter": {
-          "name": "d2",
+          "name": "d5",
           "kind": "bin"
         }
       },
-      "args": ["input_single.txt"],
-      "cwd": "${workspaceFolder}/d2"
+      "args": [
+        "input.txt"
+      ],
+      "cwd": "${workspaceFolder}/d5"
     },
   ]
 }

@@ -1,5 +1,7 @@
+use std::cmp;
 use std::fs;
 use std::path::PathBuf;
+use std::ops::RangeInclusive;
 
 /// Parses the input string into two vectors:
 /// 1. A vector of inclusive ranges (start, end).
@@ -8,7 +10,7 @@ use std::path::PathBuf;
 /// The input is expected to be two sections separated by a double newline.
 /// The first section contains ranges in "min-max" format.
 /// The second section contains individual IDs.
-fn parse_input(input: &str) -> (Vec<(u64, u64)>, Vec<u64>) {
+fn parse_input(input: &str) -> (Vec<RangeInclusive<u64>>, Vec<u64>) {
     // Split the input into two sections based on the blank line.
     let mut sections = input.split("\n\n");
     // Use the iterator to get the first section
@@ -23,7 +25,7 @@ fn parse_input(input: &str) -> (Vec<(u64, u64)>, Vec<u64>) {
             let mut parts = line.split('-');
             let start = parts.next()?.parse::<u64>().ok()?;
             let end = parts.next()?.parse::<u64>().ok()?;
-            Some((start, end))
+            Some(start..=end)
         })
         .collect();
 
@@ -45,7 +47,7 @@ fn solve_part1(input: &str) -> u64 {
     // Iterate through each ID and check if it exists in any of the ranges.
     // The filter keeps only IDs that satisfy the condition (id >= start && id <= end).
     ids.iter()
-        .filter(|&&id| ranges.iter().any(|&(start, end)| id >= start && id <= end))
+        .filter(|&&id| ranges.iter().any(|ri| ri.contains(&id)))
         .count() as u64
 }
 
@@ -60,19 +62,18 @@ fn solve_part2(input: &str) -> u64 {
     // Don't care about the second arg in the tuple for the IDs
     let (mut ranges, _) = parse_input(input);
     // Sort ranges by start value for merging.
-    ranges.sort_by_key(|r| r.0);
+    ranges.sort_by_key(|r| *r.start());
 
     // Iterate through sorted ranges and merge them.
-    let mut merged_ranges: Vec<(u64, u64)> = Vec::new();
+    let mut merged_ranges: Vec<RangeInclusive<u64>> = Vec::new();
     for current_range in ranges {
         if let Some(previous_range) = merged_ranges.last_mut() {
-            // If the current range overlaps with or is adjacent to the last merged range...
-            // (e.g., [1-5] and [6-10] are adjacent and can be merged into [1-10])
-            if current_range.0 <= previous_range.1 + 1 {
-                // Extend the end of the last range if the current range goes further.
-                previous_range.1 = previous_range.1.max(current_range.1);
+            // Overlap or adjacency: [a..=b] and [c..=d] can merge if c <= b+1 (safe add)
+            if *current_range.start() <= (*previous_range.end()).saturating_add(1) {
+                // Keep the earlier start (since we sorted), and extend the end as needed
+                *previous_range = *previous_range.start()..=cmp::max(*previous_range.end(), *current_range.end());
             } else {
-                // No overlap/adjacency, start a new merged range.
+                // No overlap/adjacency; start a new merged range
                 merged_ranges.push(current_range);
             }
         } else {
@@ -84,7 +85,7 @@ fn solve_part2(input: &str) -> u64 {
     // Length of an inclusive range [a, b] is (b - a + 1).
     merged_ranges
         .iter()
-        .map(|(start, end)| end - start + 1)
+        .map(|ri| ri.end() - ri.start() + 1)
         .sum()
 }
 
