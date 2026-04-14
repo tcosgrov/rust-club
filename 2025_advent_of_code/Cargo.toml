@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-default-members = [ "d7" ]
+default-members = [ "d9" ]
 members = [
     "d1",
     "d2",
@@ -8,6 +8,6 @@ members = [
     "d4",
     "d5",
     "d6",
-    "d7",
+    "d7", "d9",
 ]
 exclude = ["rustlings"]
