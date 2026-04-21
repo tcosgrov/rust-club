@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 geo = "0.32.0"
-rstar = "0.12.2"
+rusqlite = { version = "0.39.0", features = ["bundled"] }
